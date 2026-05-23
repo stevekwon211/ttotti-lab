@@ -2,7 +2,7 @@ ttotti lab is a browser-native creative coding lab for motion, vision, WebGL, an
 
 The first experiment is a MediaPipe hand-tracking VFX sketch. The repo is structured so future work can grow into small open-source packages instead of one-off demos.
 
-Live demo: https://ttotti-lab.vercel.app
+Preview demo: https://ttotti-l548ic57a-zero-sq.vercel.app
 
 ## Experiments
 
