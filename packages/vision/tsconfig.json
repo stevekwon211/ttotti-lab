@@ -1,0 +1,17 @@
+{
+  "extends": "@workspace/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "paths": {
+      "@ttotti/effects": ["../effects/src/index.ts"],
+      "@ttotti/effects/*": ["../effects/src/*"],
+      "@ttotti/vision": ["./src/index.ts"],
+      "@ttotti/vision/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

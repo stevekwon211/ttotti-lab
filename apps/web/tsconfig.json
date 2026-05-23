@@ -4,7 +4,13 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@workspace/ui/*": ["../../packages/ui/src/*"]
+      "@ttotti/effects": ["../../packages/effects/src/index.ts"],
+      "@ttotti/effects/*": ["../../packages/effects/src/*"],
+      "@ttotti/hand-particles": ["../../experiments/hand-particles/src/index.ts"],
+      "@ttotti/hand-particles/*": ["../../experiments/hand-particles/src/*"],
+      "@ttotti/ui/*": ["../../packages/ui/src/*"],
+      "@ttotti/vision": ["../../packages/vision/src/index.ts"],
+      "@ttotti/vision/*": ["../../packages/vision/src/*"]
     },
     "plugins": [
       {

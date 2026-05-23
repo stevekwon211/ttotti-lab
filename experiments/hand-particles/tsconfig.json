@@ -1,0 +1,20 @@
+{
+  "extends": "@workspace/typescript-config/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "paths": {
+      "@ttotti/effects": ["../../packages/effects/src/index.ts"],
+      "@ttotti/effects/*": ["../../packages/effects/src/*"],
+      "@ttotti/hand-particles": ["./src/index.ts"],
+      "@ttotti/hand-particles/*": ["./src/*"],
+      "@ttotti/ui/*": ["../../packages/ui/src/*"],
+      "@ttotti/vision": ["../../packages/vision/src/index.ts"],
+      "@ttotti/vision/*": ["../../packages/vision/src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
