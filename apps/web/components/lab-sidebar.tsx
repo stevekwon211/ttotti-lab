@@ -1,7 +1,6 @@
 import { experiments } from "@/lib/experiments"
 import { buttonVariants } from "@ttotti/ui/components/button"
 import { cn } from "@ttotti/ui/lib/utils"
-import { GitFork, Radio } from "lucide-react"
 import Link from "next/link"
 
 type LabSidebarProps = {
@@ -15,17 +14,14 @@ export function LabSidebar({ activeSlug }: LabSidebarProps) {
     <aside className="flex min-h-0 flex-col border-lab-line bg-lab-bg px-4 py-4 text-lab-text max-lg:border-b lg:sticky lg:top-0 lg:h-svh lg:border-r lg:px-5">
       <Link
         href="/"
-        className="group flex items-center justify-between rounded-sm py-1 transition outline-none focus-visible:ring-2 focus-visible:ring-lab-blue/40"
+        className="group block rounded-sm py-1 transition outline-none focus-visible:ring-2 focus-visible:ring-lab-ink/40"
       >
-        <div>
-          <p className="font-mono text-[10px] tracking-[0.2em] text-lab-dim uppercase">
-            creative coding
-          </p>
-          <h1 className="font-serif text-[2rem] leading-none tracking-normal text-lab-text">
-            ttotti lab
-          </h1>
-        </div>
-        <span className="size-1.5 rounded-full bg-lab-blue shadow-[0_0_18px_var(--lab-blue)]" />
+        <p className="font-mono text-[10px] tracking-[0.2em] text-lab-dim uppercase">
+          creative coding
+        </p>
+        <h1 className="font-serif text-[2rem] leading-none tracking-normal text-lab-text">
+          ttotti lab
+        </h1>
       </Link>
 
       <p className="mt-5 hidden max-w-[24ch] text-sm leading-6 text-lab-muted sm:block">
@@ -33,8 +29,7 @@ export function LabSidebar({ activeSlug }: LabSidebarProps) {
       </p>
 
       <nav aria-label="experiments" className="mt-5 min-h-0 flex-1 lg:mt-8">
-        <div className="mb-2 flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-lab-dim uppercase">
-          <Radio className="size-3 text-lab-blue" />
+        <div className="mb-2 font-mono text-[10px] tracking-[0.2em] text-lab-dim uppercase">
           works
         </div>
         <div className="flex gap-1 overflow-x-auto pb-1 lg:block lg:space-y-1 lg:overflow-visible lg:pb-0">
@@ -47,9 +42,9 @@ export function LabSidebar({ activeSlug }: LabSidebarProps) {
                 href={experiment.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group block min-w-[168px] rounded-sm border border-transparent px-3 py-3 transition outline-none focus-visible:ring-2 focus-visible:ring-lab-blue/40 lg:min-w-0",
+                  "group block min-w-[168px] rounded-sm border border-transparent px-3 py-3 transition outline-none focus-visible:ring-2 focus-visible:ring-lab-ink/40 lg:min-w-0",
                   active
-                    ? "border-lab-line bg-lab-blue-faint text-lab-text"
+                    ? "border-lab-line bg-lab-ink-faint text-lab-text"
                     : "text-lab-muted hover:bg-lab-panel hover:text-lab-text"
                 )}
               >
@@ -60,14 +55,6 @@ export function LabSidebar({ activeSlug }: LabSidebarProps) {
                   <span className="flex-1 text-sm font-medium">
                     {experiment.title}
                   </span>
-                  <span
-                    className={cn(
-                      "h-1.5 w-1.5 rounded-full",
-                      experiment.status === "live"
-                        ? "bg-lab-blue"
-                        : "bg-lab-line-strong"
-                    )}
-                  />
                 </div>
                 <p className="mt-2 hidden text-xs leading-5 text-lab-dim group-hover:text-lab-muted lg:line-clamp-2 lg:block">
                   {experiment.summary}
@@ -94,11 +81,10 @@ export function LabSidebar({ activeSlug }: LabSidebarProps) {
           className={buttonVariants({
             variant: "outline",
             className:
-              "mt-4 w-full justify-between border-lab-line bg-lab-surface text-lab-muted hover:bg-lab-panel hover:text-lab-text",
+              "mt-4 w-full border-lab-line bg-lab-surface text-lab-muted hover:bg-lab-panel hover:text-lab-text",
           })}
         >
           source
-          <GitFork />
         </Link>
       </div>
     </aside>

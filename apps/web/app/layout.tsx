@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 import type { Metadata } from "next"
 
-import { ThemeProvider } from "@/components/theme-provider"
 import { TooltipProvider } from "@ttotti/ui/components/tooltip"
 import "@ttotti/ui/globals.css"
 import { cn } from "@ttotti/ui/lib/utils"
@@ -35,16 +34,14 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       className={cn(
-        "dark font-sans antialiased",
+        "font-sans antialiased",
         fontMono.variable,
         fontSerif.variable,
         geist.variable
       )}
     >
       <body>
-        <ThemeProvider defaultTheme="dark" enableSystem={false}>
-          <TooltipProvider>{children}</TooltipProvider>
-        </ThemeProvider>
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   )

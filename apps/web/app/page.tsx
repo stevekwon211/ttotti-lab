@@ -1,8 +1,6 @@
 import { LabSidebar } from "@/components/lab-sidebar"
 import { experiments } from "@/lib/experiments"
 import { buttonVariants } from "@ttotti/ui/components/button"
-import { cn } from "@ttotti/ui/lib/utils"
-import { ArrowUpRight, ScanLine } from "lucide-react"
 import Link from "next/link"
 
 export default function Page() {
@@ -45,7 +43,6 @@ export default function Page() {
               <p className="font-mono text-[11px] tracking-[0.2em] text-lab-dim uppercase">
                 selected
               </p>
-              <ScanLine className="size-4 text-lab-blue" />
             </div>
 
             <div className="mt-6">
@@ -92,13 +89,13 @@ export default function Page() {
 
             <Link
               href={liveExperiment?.href ?? "/experiments"}
-              className={cn(
-                buttonVariants(),
-                "mt-auto w-full justify-between bg-lab-blue text-lab-bg hover:bg-lab-blue/90"
-              )}
+              className={buttonVariants({
+                variant: "outline",
+                className:
+                  "mt-auto w-full border-lab-text bg-lab-bg text-lab-text hover:bg-lab-elevated",
+              })}
             >
               open
-              <ArrowUpRight />
             </Link>
           </aside>
         </section>

@@ -77,8 +77,8 @@ const HAND_CONNECTIONS: readonly [number, number][] = [
   [13, 17],
 ]
 
-const PARTICLE_BLUE = "cornflowerblue"
-const PARTICLE_HOT = "lightskyblue"
+const PARTICLE_INK = "black"
+const PARTICLE_SOFT = "dimgray"
 
 export function HandParticlesDemo() {
   const videoRef = React.useRef<HTMLVideoElement | null>(null)
@@ -307,7 +307,7 @@ export function HandParticlesDemo() {
                 hand particles
               </h1>
             </div>
-            <span className="rounded-sm bg-lab-blue px-2 py-1 font-mono text-[10px] font-medium tracking-[0.14em] text-lab-bg uppercase">
+            <span className="rounded-sm border border-lab-text bg-lab-bg px-2 py-1 font-mono text-[10px] font-medium tracking-[0.14em] text-lab-text uppercase">
               {status === "running" ? "live" : "idle"}
             </span>
           </div>
@@ -322,9 +322,10 @@ export function HandParticlesDemo() {
         <div className="mt-6 grid grid-cols-[1fr_auto] gap-2">
           <Button
             type="button"
+            variant="outline"
             onClick={startDemo}
             disabled={status === "loading" || status === "running"}
-            className="bg-lab-blue text-lab-bg hover:bg-lab-blue/90"
+            className="border-lab-text bg-lab-bg text-lab-text hover:bg-lab-elevated"
           >
             {status === "loading" ? "loading" : "start camera"}
           </Button>
@@ -443,7 +444,7 @@ function ParticleCanvas({
           >
             <sphereGeometry args={[0.035 + point.energy * 0.035, 12, 12]} />
             <meshBasicMaterial
-              color={point.energy > 0.9 ? PARTICLE_HOT : PARTICLE_BLUE}
+              color={point.energy > 0.9 ? PARTICLE_INK : PARTICLE_SOFT}
               transparent
               opacity={Math.max(0, 1 - point.age / point.life)}
             />
@@ -476,7 +477,7 @@ function LandmarkOverlay({
             y1={a.y}
             x2={b.x}
             y2={b.y}
-            stroke="var(--lab-blue)"
+            stroke="black"
             opacity="0.56"
             strokeWidth="1.5"
           />
@@ -488,7 +489,7 @@ function LandmarkOverlay({
           cx={landmark.x}
           cy={landmark.y}
           r={index === 4 || index === 8 ? 5 : 3}
-          fill={index === 4 || index === 8 ? "var(--lab-blue)" : "white"}
+          fill={index === 4 || index === 8 ? "black" : "white"}
           opacity="0.86"
         />
       ))}

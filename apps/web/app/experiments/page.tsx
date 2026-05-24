@@ -1,6 +1,5 @@
 import { LabSidebar } from "@/components/lab-sidebar"
 import { experiments } from "@/lib/experiments"
-import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
 export default function ExperimentsPage() {
@@ -52,10 +51,9 @@ export default function ExperimentsPage() {
                   </div>
                 </div>
                 <div className="flex items-start justify-between gap-3 sm:justify-end">
-                  <span className="font-mono text-[10px] tracking-[0.16em] text-lab-blue uppercase">
+                  <span className="font-mono text-[10px] tracking-[0.16em] text-lab-ink uppercase">
                     {experiment.status}
                   </span>
-                  <ArrowUpRight className="size-4 text-lab-dim transition group-hover:text-lab-blue" />
                 </div>
               </Link>
             ))}
