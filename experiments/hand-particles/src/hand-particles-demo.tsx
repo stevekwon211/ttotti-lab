@@ -77,6 +77,9 @@ const HAND_CONNECTIONS: readonly [number, number][] = [
   [13, 17],
 ]
 
+const PARTICLE_BLUE = "cornflowerblue"
+const PARTICLE_HOT = "lightskyblue"
+
 export function HandParticlesDemo() {
   const videoRef = React.useRef<HTMLVideoElement | null>(null)
   const stageRef = React.useRef<HTMLDivElement | null>(null)
@@ -267,115 +270,129 @@ export function HandParticlesDemo() {
   }
 
   return (
-    <section className="grid min-h-[calc(100svh-1rem)] gap-3 bg-background p-3 text-foreground lg:grid-cols-[minmax(220px,280px)_minmax(0,1fr)_minmax(240px,320px)]">
-      <aside className="flex flex-col gap-3 rounded-lg border bg-card p-3">
-        <div>
-          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-            ttotti lab / 001
-          </p>
-          <h1 className="mt-2 text-2xl font-medium leading-tight">
-            hand particles
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            fingertip trails from MediaPipe Hand Landmarker in video mode
-          </p>
-        </div>
+    <section className="grid min-h-svh gap-px bg-lab-line text-lab-text lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div
+        ref={stageRef}
+        data-testid="hand-stage"
+        className="relative min-h-[44svh] overflow-hidden bg-lab-bg sm:min-h-[68svh] lg:min-h-0"
+      >
+        <video
+          ref={videoRef}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            status === "running" ? "opacity-45" : "opacity-0"
+          } ${settings.mirror ? "scale-x-[-1]" : ""}`}
+          aria-label="webcam preview"
+        />
+        <ParticleCanvas points={trail} size={stageSize} />
+        {settings.showLandmarks ? (
+          <LandmarkOverlay landmarks={landmarks} />
+        ) : null}
 
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="absolute right-4 bottom-4 left-4 grid gap-px overflow-hidden rounded-sm bg-lab-line opacity-75 sm:grid-cols-4 lg:right-6 lg:bottom-6 lg:left-6">
           <Metric label="hands" value={String(metrics.hands)} />
           <Metric label="fps" value={String(metrics.fps)} />
           <Metric label="pinch" value={formatPinch(metrics.pinch)} />
           <Metric label="delegate" value={metrics.delegate} />
         </div>
+      </div>
 
-        <div className="flex gap-2">
+      <aside className="flex min-h-0 flex-col bg-lab-panel p-4 lg:p-5">
+        <div>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-mono text-[11px] tracking-[0.2em] text-lab-dim uppercase">
+                ttotti lab / 001
+              </p>
+              <h1 className="mt-3 font-serif text-[2.25rem] leading-[0.95] tracking-normal text-lab-text">
+                hand particles
+              </h1>
+            </div>
+            <span className="rounded-sm bg-lab-blue px-2 py-1 font-mono text-[10px] font-medium tracking-[0.14em] text-lab-bg uppercase">
+              {status === "running" ? "live" : "idle"}
+            </span>
+          </div>
+          <p className="mt-7 font-mono text-[11px] tracking-[0.2em] text-lab-dim uppercase">
+            controls
+          </p>
+          <p className="mt-3 text-sm leading-6 text-lab-muted">
+            fingertip trails from MediaPipe Hand Landmarker in video mode
+          </p>
+        </div>
+
+        <div className="mt-6 grid grid-cols-[1fr_auto] gap-2">
           <Button
             type="button"
             onClick={startDemo}
             disabled={status === "loading" || status === "running"}
-            className="flex-1"
+            className="bg-lab-blue text-lab-bg hover:bg-lab-blue/90"
           >
             {status === "loading" ? "loading" : "start camera"}
           </Button>
-          <Button type="button" variant="outline" onClick={stopDemo}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={stopDemo}
+            className="border-lab-line bg-lab-surface text-lab-muted hover:bg-lab-elevated hover:text-lab-text"
+          >
             stop
           </Button>
         </div>
 
-        <p className="rounded-md border bg-muted px-2.5 py-2 text-xs text-muted-foreground">
+        <p className="mt-3 rounded-sm bg-lab-surface px-3 py-2 font-mono text-[11px] leading-5 text-lab-muted">
           {message}
         </p>
-      </aside>
 
-      <div
-        ref={stageRef}
-        className="relative min-h-[58svh] overflow-hidden rounded-lg border bg-[#08090b] lg:min-h-0"
-      >
-        <video
-          ref={videoRef}
-          className={`absolute inset-0 h-full w-full object-cover opacity-60 ${
-            settings.mirror ? "scale-x-[-1]" : ""
-          }`}
-          aria-label="webcam preview"
-        />
-        <ParticleCanvas points={trail} size={stageSize} />
-        {settings.showLandmarks ? <LandmarkOverlay landmarks={landmarks} /> : null}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_18%,rgba(120,255,214,0.22),transparent_26%),radial-gradient(circle_at_80%_70%,rgba(255,121,96,0.14),transparent_30%)]" />
-        <div className="pointer-events-none absolute left-3 top-3 rounded-md border border-white/10 bg-black/35 px-2 py-1 text-xs text-white/70 backdrop-blur">
-          {status === "running" ? "live" : "preview"}
+        <div className="mt-6 space-y-3">
+          <ControlRow label="mirror">
+            <Switch
+              checked={settings.mirror}
+              onCheckedChange={(mirror) =>
+                setSettings((current) => ({ ...current, mirror }))
+              }
+            />
+          </ControlRow>
+          <ControlRow label="landmarks">
+            <Switch
+              checked={settings.showLandmarks}
+              onCheckedChange={(showLandmarks) =>
+                setSettings((current) => ({ ...current, showLandmarks }))
+              }
+            />
+          </ControlRow>
+          <SliderControl
+            label="effect strength"
+            value={settings.strength}
+            min={0.2}
+            max={1.4}
+            step={0.05}
+            onChange={(strength) =>
+              setSettings((current) => ({ ...current, strength }))
+            }
+          />
+          <SliderControl
+            label="smoothing"
+            value={settings.smoothing}
+            min={0.05}
+            max={0.85}
+            step={0.05}
+            onChange={(smoothing) =>
+              setSettings((current) => ({ ...current, smoothing }))
+            }
+          />
+          <SliderControl
+            label="max hands"
+            value={settings.maxHands}
+            min={1}
+            max={2}
+            step={1}
+            onChange={(maxHands) =>
+              setSettings((current) => ({ ...current, maxHands }))
+            }
+          />
         </div>
-      </div>
 
-      <aside className="flex flex-col gap-3 rounded-lg border bg-card p-3">
-        <h2 className="text-sm font-medium">controls</h2>
-        <ControlRow label="mirror">
-          <Switch
-            checked={settings.mirror}
-            onCheckedChange={(mirror) =>
-              setSettings((current) => ({ ...current, mirror }))
-            }
-          />
-        </ControlRow>
-        <ControlRow label="landmarks">
-          <Switch
-            checked={settings.showLandmarks}
-            onCheckedChange={(showLandmarks) =>
-              setSettings((current) => ({ ...current, showLandmarks }))
-            }
-          />
-        </ControlRow>
-        <SliderControl
-          label="effect strength"
-          value={settings.strength}
-          min={0.2}
-          max={1.4}
-          step={0.05}
-          onChange={(strength) =>
-            setSettings((current) => ({ ...current, strength }))
-          }
-        />
-        <SliderControl
-          label="smoothing"
-          value={settings.smoothing}
-          min={0.05}
-          max={0.85}
-          step={0.05}
-          onChange={(smoothing) =>
-            setSettings((current) => ({ ...current, smoothing }))
-          }
-        />
-        <SliderControl
-          label="max hands"
-          value={settings.maxHands}
-          min={1}
-          max={2}
-          step={1}
-          onChange={(maxHands) =>
-            setSettings((current) => ({ ...current, maxHands }))
-          }
-        />
-        <div className="mt-auto rounded-md border bg-muted p-3 text-xs text-muted-foreground">
-          pinch your thumb and index finger to push the particle intensity
+        <div className="mt-auto pt-6 text-xs leading-5 text-lab-dim">
+          pinch your thumb and index finger to push particle intensity
         </div>
       </aside>
     </section>
@@ -426,7 +443,7 @@ function ParticleCanvas({
           >
             <sphereGeometry args={[0.035 + point.energy * 0.035, 12, 12]} />
             <meshBasicMaterial
-              color={point.energy > 0.9 ? "#ff7a5c" : "#77ffd7"}
+              color={point.energy > 0.9 ? PARTICLE_HOT : PARTICLE_BLUE}
               transparent
               opacity={Math.max(0, 1 - point.age / point.life)}
             />
@@ -437,7 +454,11 @@ function ParticleCanvas({
   )
 }
 
-function LandmarkOverlay({ landmarks }: { landmarks: readonly ViewportLandmark[] }) {
+function LandmarkOverlay({
+  landmarks,
+}: {
+  landmarks: readonly ViewportLandmark[]
+}) {
   return (
     <svg className="pointer-events-none absolute inset-0 h-full w-full">
       {HAND_CONNECTIONS.map(([from, to]) => {
@@ -455,8 +476,9 @@ function LandmarkOverlay({ landmarks }: { landmarks: readonly ViewportLandmark[]
             y1={a.y}
             x2={b.x}
             y2={b.y}
-            stroke="rgba(119, 255, 215, 0.56)"
-            strokeWidth="2"
+            stroke="var(--lab-blue)"
+            opacity="0.56"
+            strokeWidth="1.5"
           />
         )
       })}
@@ -466,7 +488,7 @@ function LandmarkOverlay({ landmarks }: { landmarks: readonly ViewportLandmark[]
           cx={landmark.x}
           cy={landmark.y}
           r={index === 4 || index === 8 ? 5 : 3}
-          fill={index === 4 || index === 8 ? "#ff7a5c" : "#f8fafc"}
+          fill={index === 4 || index === 8 ? "var(--lab-blue)" : "white"}
           opacity="0.86"
         />
       ))}
@@ -476,11 +498,11 @@ function LandmarkOverlay({ landmarks }: { landmarks: readonly ViewportLandmark[]
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border bg-background px-2 py-1.5">
-      <div className="text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+    <div className="bg-lab-surface px-3 py-3">
+      <div className="font-mono text-[10px] tracking-[0.16em] text-lab-dim uppercase">
         {label}
       </div>
-      <div className="mt-1 font-mono text-sm">{value}</div>
+      <div className="mt-2 font-mono text-xs text-lab-muted">{value}</div>
     </div>
   )
 }
@@ -493,8 +515,8 @@ function ControlRow({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-md border px-2.5 py-2">
-      <span className="text-sm">{label}</span>
+    <div className="flex items-center justify-between gap-3 rounded-sm bg-lab-surface px-3 py-2">
+      <span className="text-sm text-lab-muted">{label}</span>
       {children}
     </div>
   )
@@ -516,12 +538,12 @@ function SliderControl({
   onChange: (value: number) => void
 }) {
   return (
-    <div className="rounded-md border px-2.5 py-2">
+    <div className="rounded-sm bg-lab-surface px-3 py-3">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <span className="text-sm">{label}</span>
+        <span className="text-sm text-lab-muted">{label}</span>
         <Tooltip>
           <TooltipTrigger>
-            <span className="font-mono text-xs text-muted-foreground">
+            <span className="font-mono text-xs text-lab-dim">
               {Number.isInteger(value) ? value : value.toFixed(2)}
             </span>
           </TooltipTrigger>

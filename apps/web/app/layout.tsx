@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 import type { Metadata } from "next"
 
 import { ThemeProvider } from "@/components/theme-provider"
@@ -19,6 +19,12 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+const fontSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-serif",
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,6 +37,7 @@ export default function RootLayout({
       className={cn(
         "dark font-sans antialiased",
         fontMono.variable,
+        fontSerif.variable,
         geist.variable
       )}
     >

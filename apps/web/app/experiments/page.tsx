@@ -1,73 +1,67 @@
+import { LabSidebar } from "@/components/lab-sidebar"
 import { experiments } from "@/lib/experiments"
-import { Badge } from "@ttotti/ui/components/badge"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@ttotti/ui/components/card"
+import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
 export default function ExperimentsPage() {
   return (
-    <main className="min-h-svh bg-background p-4 text-foreground">
-      <div className="mx-auto grid max-w-6xl gap-4">
-        <header className="flex flex-col gap-2 rounded-lg border bg-card p-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-              ttotti lab
-            </p>
-            <h1 className="mt-2 text-2xl font-medium">experiments</h1>
-          </div>
-          <p className="max-w-xl text-sm leading-6 text-muted-foreground">
-            each entry starts as a focused demo, then graduates into reusable
-            packages when the interaction feels worth keeping
-          </p>
-        </header>
+    <main className="min-h-svh bg-lab-bg text-lab-text lg:grid lg:grid-cols-[272px_minmax(0,1fr)]">
+      <LabSidebar />
 
-        <section className="grid gap-3 md:grid-cols-2">
-          {experiments.map((experiment) => (
-            <Card key={experiment.slug}>
-              <CardHeader>
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <CardTitle>{experiment.title}</CardTitle>
-                    <CardDescription className="mt-1">
-                      {experiment.input}
-                    </CardDescription>
+      <section className="min-w-0 bg-lab-surface px-4 py-6 lg:px-6">
+        <div className="mx-auto max-w-5xl">
+          <header className="border-b border-lab-line pb-7">
+            <p className="font-mono text-[11px] tracking-[0.22em] text-lab-dim uppercase">
+              all works
+            </p>
+            <h1 className="mt-3 font-serif text-[2.6rem] leading-[0.95] tracking-normal sm:text-[3.5rem]">
+              experiments
+            </h1>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-lab-muted">
+              focused demos, kept small enough to become libraries when the
+              interaction is worth repeating
+            </p>
+          </header>
+
+          <div className="mt-6 divide-y divide-lab-line">
+            {experiments.map((experiment, index) => (
+              <Link
+                key={experiment.slug}
+                href={experiment.href}
+                className="group grid gap-4 py-5 transition hover:bg-lab-panel sm:grid-cols-[84px_minmax(0,1fr)_120px] sm:px-3"
+              >
+                <div className="font-mono text-xs text-lab-dim">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-lab-text">
+                    {experiment.title}
+                  </h2>
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-lab-muted">
+                    {experiment.summary}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {experiment.stack.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-sm bg-lab-panel px-2 py-1 font-mono text-[10px] text-lab-muted"
+                      >
+                        {item}
+                      </span>
+                    ))}
                   </div>
-                  <Badge
-                    variant={
-                      experiment.status === "live" ? "default" : "secondary"
-                    }
-                  >
+                </div>
+                <div className="flex items-start justify-between gap-3 sm:justify-end">
+                  <span className="font-mono text-[10px] tracking-[0.16em] text-lab-blue uppercase">
                     {experiment.status}
-                  </Badge>
+                  </span>
+                  <ArrowUpRight className="size-4 text-lab-dim transition group-hover:text-lab-blue" />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  {experiment.summary}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {experiment.stack.map((item) => (
-                    <Badge key={item} variant="outline">
-                      {item}
-                    </Badge>
-                  ))}
-                </div>
-                <Link
-                  href={experiment.href}
-                  className="mt-5 inline-flex text-sm font-medium underline-offset-4 hover:underline"
-                >
-                  open
-                </Link>
-              </CardContent>
-            </Card>
-          ))}
-        </section>
-      </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   )
 }
