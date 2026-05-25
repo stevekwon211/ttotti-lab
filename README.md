@@ -1,15 +1,13 @@
 ttotti lab is a browser-native creative coding lab for motion, vision, WebGL, and media art.
 
-The first experiment is a MediaPipe hand-tracking VFX sketch. The repo is structured so future work can grow into small open-source packages instead of one-off demos.
+Small experiments live in this monorepo. Standalone OSS projects stay in their own repositories, but appear here as first-class showcase routes.
 
 Preview demo: https://ttotti-l548ic57a-zero-sq.vercel.app
 
 ## Experiments
 
-- `hand-particles`: fingertip particle trails powered by MediaPipe Hand Landmarker in `VIDEO` mode.
-- `face-mesh-masks`: queued face mesh masks, material warps, and shader effects.
-- `pose-stage`: queued full-body pose controller for reactive visuals.
-- `splat-gestures`: queued gesture-driven Gaussian Splat interaction.
+- `splatcarve`: external showcase for voxel-resolution carving in browser 3D Gaussian Splat scenes.
+- `hand-particles`: internal fingertip particle trails powered by MediaPipe Hand Landmarker in `VIDEO` mode.
 
 ## Workspace
 
@@ -21,6 +19,8 @@ packages/effects            landmark mapping, smoothing, trail helpers
 experiments/hand-particles  first live MediaPipe VFX experiment
 ```
 
+External showcase routes, such as `/splatcarve`, embed the live project instead of copying source into this workspace.
+
 ## Local Setup
 
 ```bash
@@ -28,7 +28,7 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000` and visit `/experiments/hand-particles`. Camera access requires a secure context in production, so deploy through HTTPS on Vercel.
+Open `http://localhost:3000` and visit `/hand-particles` or `/splatcarve`. Camera access requires a secure context in production, so deploy through HTTPS on Vercel.
 
 ## Checks
 

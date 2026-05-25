@@ -2,7 +2,7 @@ import { handParticlesManifest } from "@ttotti/hand-particles/manifest"
 
 export type ExperimentStatus = "live" | "queued" | "sketch"
 
-export type Experiment = {
+type ExperimentBase = {
   slug: string
   title: string
   href: string
@@ -10,43 +10,89 @@ export type Experiment = {
   input: string
   stack: readonly string[]
   summary: string
+  featured?: boolean
 }
+
+export type InternalExperiment = ExperimentBase & {
+  kind: "internal"
+  sourcePath?: string
+}
+
+export type ExternalExperiment = ExperimentBase & {
+  kind: "external"
+  links: {
+    live: string
+    repo: string
+    star?: string
+  }
+  preview: {
+    type: "iframe"
+    src: string
+    fallbackVideo?: {
+      mp4: string
+      webm: string
+    }
+  }
+  notes?: readonly string[]
+}
+
+export type Experiment = InternalExperiment | ExternalExperiment
 
 export const experiments: Experiment[] = [
   {
+    slug: "splatcarve",
+    title: "splatcarve",
+    href: "/splatcarve",
+    kind: "external",
+    status: "live",
+    featured: true,
+    input: "3D Gaussian Splat scene",
+    stack: ["Three.js", "Spark", "3DGS", "WebGL", "VFX"],
+    summary:
+      "browser 3D Gaussian Splat editor for voxel-resolution carving and fragment-level masks",
+    links: {
+      live: "https://stevekwon211.github.io/splatcarve/",
+      repo: "https://github.com/stevekwon211/splatcarve",
+      star: "https://github.com/stevekwon211/splatcarve",
+    },
+    preview: {
+      type: "iframe",
+      src: "https://stevekwon211.github.io/splatcarve/",
+      fallbackVideo: {
+        mp4: "https://stevekwon211.github.io/splatcarve/launch/splatcarve.mp4",
+        webm: "https://stevekwon211.github.io/splatcarve/launch/splatcarve.webm",
+      },
+    },
+    notes: [
+      "press 2 in the live demo to enter carve mode",
+      "the fragment mask path is the default mode",
+      "source stays in the standalone splatcarve repo",
+    ],
+  },
+  {
     slug: handParticlesManifest.slug,
     title: handParticlesManifest.title,
-    href: "/experiments/hand-particles",
+    href: "/hand-particles",
+    kind: "internal",
     status: handParticlesManifest.status,
     input: handParticlesManifest.input,
     stack: handParticlesManifest.stack,
     summary: handParticlesManifest.summary,
-  },
-  {
-    slug: "face-mesh-masks",
-    title: "face mesh masks",
-    href: "/experiments",
-    status: "queued",
-    input: "webcam face landmarks",
-    stack: ["MediaPipe", "Three.js", "shaders"],
-    summary: "face mesh driven masks, material warps, and camera-space effects",
-  },
-  {
-    slug: "pose-stage",
-    title: "pose stage",
-    href: "/experiments",
-    status: "sketch",
-    input: "body pose landmarks",
-    stack: ["MediaPipe", "particles", "VJ"],
-    summary: "full-body pose as a stage controller for reactive visuals",
-  },
-  {
-    slug: "splat-gestures",
-    title: "splat gestures",
-    href: "/experiments",
-    status: "sketch",
-    input: "hand gestures + 3D splats",
-    stack: ["MediaPipe", "Gaussian Splatting", "WebGL"],
-    summary: "gesture-driven carving and inspection for Gaussian Splat scenes",
+    sourcePath: handParticlesManifest.sourcePath,
   },
 ]
+
+export const featuredExperiment =
+  experiments.find((experiment) => experiment.featured) ??
+  experiments.find((experiment) => experiment.status === "live") ??
+  experiments[0]
+
+export function getExperiment(slug: string) {
+  return experiments.find((experiment) => experiment.slug === slug)
+}
+
+export function isExternalExperiment(
+  experiment: Experiment
+): experiment is ExternalExperiment {
+  return experiment.kind === "external"
+}
